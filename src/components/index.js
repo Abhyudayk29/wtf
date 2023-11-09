@@ -1,9 +1,9 @@
 import NavigationDots from './NavigationDots';
 import Navbar from './Navbar/Navbar';
-import Map from './Map';
+import Wmap from './Wmap';
 
 export {
   NavigationDots,
   Navbar,
-  Map,
+  Wmap,
 };

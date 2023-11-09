@@ -41,10 +41,10 @@
   transition: all 0.3s ease-in-out;
 }
 .app__navbar-links li a:hover {
-  color: var(--secondary-color);
+  color: var(--gray-color);
 }
 .app__navbar-links li:hover div {
-  background: var(--secondary-color);
+  background: var(--gray-color);
 }
 
 @media screen and (max-width: 900px) {
@@ -61,7 +61,7 @@
   display: flex;
   justify-content: center;
   align-items: center;
-  background-color: var(--secondary-color);
+  background-color: var(--gray-color);
 }
 
 .app__navbar-menu svg {
@@ -83,7 +83,6 @@
   justify-content: flex-end;
   align-items: flex-end;
   flex-direction: column;
-  background: url('../../assets/bgWhite.png');
   background-color: var(--white-color);
   background-size: cover;
   background-repeat: repeat;
@@ -93,7 +92,7 @@
 .app__navbar-menu div svg {
   width: 35px;
   height: 35px;
-  color: var(--secondary-color);
+  color: var(--gray-color);
   margin: 0.5rem 1rem;
 }
 
@@ -123,7 +122,7 @@
 }
 
 .app__navbar-menu div ul li a:hover {
-  color: var(--secondary-color);
+  color: var(--gray-color);
 }
 
 @media screen and (min-width: 900px) {
