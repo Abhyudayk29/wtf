@@ -1,14 +1,16 @@
-import React, { useState, useEffect } from 'react';
+import React from 'react';
 import { AppWrap, MotionWrap } from '../../wrapper';
-import './About.scss';
+import './About.css';
 import { Map } from '../../components';
+
 const About = () => {
   return (
     <>
-      <div>
-        <Map />
+      <div className="app__about-container">
+        <div className="app__about-map">
+          <Map />
+        </div>
       </div>
-
     </>
   );
 };
@@ -16,5 +18,5 @@ const About = () => {
 export default AppWrap(
   MotionWrap(About, 'app__about'),
   'about',
-  'app__whitebg',
+  'app__whitebg'
 );
