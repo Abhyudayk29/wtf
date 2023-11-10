@@ -20,7 +20,7 @@ const Map = (props) => (
         d="M0 0h800v400H0z"
         style={{
           opacity: 1,
-          fill:  "#ffffff",
+          fill: "#ffffff",
           fillOpacity: 1,
           stroke: "none",
         }}

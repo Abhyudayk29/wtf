@@ -6,7 +6,7 @@ import { Wmap } from '../../components';
 const Map = () => {
   return (
     <>
-      <div className="app__about-container">
+      <div id="home" className="app__about-container">
         <div className="app__about-map">
           <Wmap />
         </div>
