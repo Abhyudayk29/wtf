@@ -2,6 +2,30 @@ import React, { useEffect, useState } from 'react';
 import { motion } from 'framer-motion';
 
 function Icon(){
+
+  const [selectedCountry, setSelectedCountry] = useState(null);
+  const [showRectangle, setShowRectangle] = useState(false);
+
+  const fetchDataFromMongoDB = (countryId) => {
+    // Replace this with your actual MongoDB data retrieval logic
+    // For simplicity, just returning a dummy string here
+    return 'Data for ' + countryId;
+  };
+
+  const handleCountryClick = (countryId) => {
+    setSelectedCountry(countryId);
+    setShowRectangle(true);
+  };
+
+  const handleCloseButtonClick = () => {
+    setShowRectangle(false);
+  };
+
+  const rectWidth = 200;
+  const rectHeight = 100;
+  const rectX = 10;
+  const rectY = 10;
+
   return (
     <svg
       xmlns="http://www.w3.org/2000/svg"
@@ -48,6 +72,7 @@ function Icon(){
                 fill="#6b7688"
                 whileHover={{ scale: 1.5, strokeWidth: 1, fill: "lightblue", }}
                 whileTap={{ scale: 1.2 }}
+                onClick={() => handleCountryClick("Montenegro")}
               />
             </g>
             <g>
@@ -696,7 +721,8 @@ function Icon(){
                 strokeWidth="0.39"
                 fill="#6b7688"
                 whileHover={{ scale: 1.1, strokeWidth: 1, fill: "lightblue", }}
-                whileTap={{ scale: 1.2 }} />
+                onClick={() => handleCountryClick("India")}
+                />
             </g>
             <g>
               <title id="Sri Lanka">Sri Lanka</title>
@@ -1836,7 +1862,32 @@ function Icon(){
         opacity="1"
         vectorEffect="none"
       ></path>
-      
+       {showRectangle && (
+        <g>
+          <rect
+            x={rectX}
+            y={rectY}
+            width={rectWidth}
+            height={rectHeight}
+            fill="white"
+            stroke="black"
+            strokeWidth="1"
+          />
+          <text x={rectX + 20} y={rectY + 40} fill="black">
+            {fetchDataFromMongoDB(selectedCountry)}
+          </text>
+          <motion.text
+            x={rectX + rectWidth - 20}
+            y={rectY + 30}
+            fill="red"
+            style={{ cursor: 'pointer' }}
+            whileHover={{ scale: 1.2 }}
+            onClick={handleCloseButtonClick}
+          >
+            X
+          </motion.text>
+        </g>
+      )}
     </svg>
   );
 }
