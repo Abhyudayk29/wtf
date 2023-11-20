@@ -71,7 +71,6 @@ function Icon(){
                 d="M443.617 107.095c-.586-.057-.645-.71-1.186-.885-.407-.11-.85-.236-.833-.693.543-.167-.12-.556.056-.938.5-.058.294-.538.72-.733.27-.087.856.369.441-.228-.2-.459.575-.177.777-.019.408.2.619.656 1.119.698.371.011.58.417 1.015.449.309.394-.611.224-.724.442.574.213-.102.686-.5.417-.54-.283-.933.37-.989.803.092.226.132.443.104.687z"
                 fill="#6b7688"
                 whileHover={{ scale: 1.5, strokeWidth: 1, fill: "lightblue", }}
-                whileTap={{ scale: 1.2 }}
                 onClick={() => handleCountryClick("Montenegro")}
               />
             </g>
@@ -878,7 +877,7 @@ function Icon(){
                 strokeWidth="0.39"
                 fill="#6b7688"
                 whileHover={{ scale: 1.1, strokeWidth: 1, fill: "lightblue", }}
-                whileTap={{ scale: 1.2 }} />
+                onClick={() => handleCountryClick("China")} />
             </g><g>
               <title id="Japan">Japan</title>
               <motion.path
