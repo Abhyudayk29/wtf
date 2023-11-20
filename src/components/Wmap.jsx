@@ -1,10 +1,11 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { motion } from 'framer-motion';
 
-function Icon(){
-
+function Icon() {
   const [selectedCountry, setSelectedCountry] = useState(null);
   const [showRectangle, setShowRectangle] = useState(false);
+  const [rectanglePosition, setRectanglePosition] = useState({ x: 0, y: 0 });
+  const [svgDimensions, setSvgDimensions] = useState({ width: 1080, height: 540 });
 
   const fetchDataFromMongoDB = (countryId) => {
     // Replace this with your actual MongoDB data retrieval logic
@@ -12,19 +13,52 @@ function Icon(){
     return 'Data for ' + countryId;
   };
 
-  const handleCountryClick = (countryId) => {
+  const handleCountryClick = (countryId, event) => {
     setSelectedCountry(countryId);
+    const clickEvent = event || window.event;
+
+    const svgRect = clickEvent.target.ownerSVGElement.getBoundingClientRect();
+    const x = clickEvent.clientX - svgRect.left;
+    const y = clickEvent.clientY - svgRect.top;
+
+    const xMin = 100;
+    const yMin = 300;
+    const xMax = 1000;
+    const yMax = 600;
+
+    const rectWidth = 200;
+    const rectHeight = 300;
+
+    const adjustedX = Math.min(xMax - rectWidth, Math.max(xMin, x));
+    const adjustedY = Math.min(yMax - rectHeight, Math.max(yMin, y));
+
+    setRectanglePosition({ x: adjustedX, y: adjustedY });
     setShowRectangle(true);
   };
+
+
 
   const handleCloseButtonClick = () => {
     setShowRectangle(false);
   };
 
-  const rectWidth = 300;
-  const rectHeight = 100;
-  const rectX = 10;
-  const rectY = 10;
+  useEffect(() => {
+    const updateSvgDimensions = () => {
+      const svgElement = document.getElementById('svg2');
+      setSvgDimensions({
+        width: svgElement.clientWidth,
+        height: svgElement.clientHeight,
+      });
+    };
+
+    updateSvgDimensions();
+
+    window.addEventListener('resize', updateSvgDimensions);
+
+    return () => {
+      window.removeEventListener('resize', updateSvgDimensions);
+    };
+  }, []);
 
   return (
     <svg
@@ -721,7 +755,7 @@ function Icon(){
                 fill="#6b7688"
                 whileHover={{ scale: 1.1, strokeWidth: 1, fill: "lightblue", }}
                 onClick={() => handleCountryClick("India")}
-                />
+              />
             </g>
             <g>
               <title id="Sri Lanka">Sri Lanka</title>
@@ -1861,34 +1895,45 @@ function Icon(){
         opacity="1"
         vectorEffect="none"
       ></path>
-       {showRectangle && (
+      {showRectangle && (
         <g>
           <rect
-            x={rectX}
-            y={rectY}
-            width={rectWidth}
-            height={rectHeight}
-            fill="white"
-            stroke="black"
-            strokeWidth="1"
+            x={rectanglePosition.x - 200}
+            y={rectanglePosition.y - 200}
+            width={400}
+            height={400}
+            fill="#ffffff"
+            fillOpacity={0.9}
+            stroke="none"
           />
-          <text x={rectX + 20} y={rectY + 40} fill="black">
+          <text
+            x={rectanglePosition.x}
+            y={rectanglePosition.y}
+            textAnchor="middle"
+            dominantBaseline="middle"
+          >
             {fetchDataFromMongoDB(selectedCountry)}
           </text>
-          <motion.text
-            x={rectX + rectWidth - 20}
-            y={rectY + 30}
-            fill="red"
-            style={{ cursor: 'pointer' }}
-            whileHover={{ scale: 1.2 }}
-            onClick={handleCloseButtonClick}
+          <text
+            x={rectanglePosition.x}
+            y={rectanglePosition.y + 80}
+            textAnchor="middle"
+            dominantBaseline="middle"
           >
-            X
-          </motion.text>
+            Additional Information
+          </text>
+          <rect
+            x={rectanglePosition.x + 180}
+            y={rectanglePosition.y - 200}
+            width={20}
+            height={20}
+            fill="#6b7688"
+            onClick={handleCloseButtonClick}
+          />
         </g>
       )}
     </svg>
   );
 }
-    
+
 export default Icon;
