@@ -8,9 +8,9 @@ function Icon() {
   const [svgDimensions, setSvgDimensions] = useState({ width: 1080, height: 540 });
   const [countryData, setCountryData] = useState(null);
 
-  const fetchDataFromMongoDB = async (countryId) => {
+  const fetchDataFromMongoDB = async (countryName) => {
     try {
-      const response = await fetch(`http://localhost:5000/api/countries/${countryId}`);
+      const response = await fetch(`http://localhost:5000/api/countries/${encodeURIComponent(countryName)}`);
       
       if (!response.ok) {
         console.error(`Error fetching data from server: ${response.status} - ${response.statusText}`);
@@ -32,9 +32,9 @@ function Icon() {
       return null;
     }
   };
-  
-  const handleCountryClick = async (countryId, event) => {
-    setSelectedCountry(countryId);
+
+  const handleCountryClick = async (countryName, event) => {
+    setSelectedCountry(countryName);
     const clickEvent = event || window.event;
 
     const svgRect = clickEvent.target.ownerSVGElement.getBoundingClientRect();
@@ -54,11 +54,9 @@ function Icon() {
 
     setRectanglePosition({ x: adjustedX, y: adjustedY });
 
-    // Fetch data and update state when the data is received
-    const data = await fetchDataFromMongoDB(countryId);
+    const data = await fetchDataFromMongoDB(countryName);
     setCountryData(data);
 
-    // Show the rectangle after data is fetched
     setShowRectangle(true);
   };
 
@@ -1941,18 +1939,32 @@ function Icon() {
             Country ID: {selectedCountry}
           </text>
           {countryData && (
-            <text
-              x={rectanglePosition.x}
-              y={rectanglePosition.y + 40}
-              textAnchor="middle"
-              dominantBaseline="middle"
-            >
-              Country Data:
-              <tspan x={rectanglePosition.x} dy="1.2em">{`Population: ${countryData.population}`}</tspan>
-              <tspan x={rectanglePosition.x} dy="1.2em">{`Capital: ${countryData.capital}`}</tspan>
-              <tspan x={rectanglePosition.x} dy="1.2em">{`Language: ${countryData.language}`}</tspan>
-            </text>
-          )}
+  <text
+    x={rectanglePosition.x}
+    y={rectanglePosition.y + 40}
+    textAnchor="middle"
+    dominantBaseline="middle"
+  >
+    Country Data:
+    <tspan x={rectanglePosition.x} dy="1.2em">{`ID: ${countryData.id}`}</tspan>
+    <tspan x={rectanglePosition.x} dy="1.2em">{`Name: ${countryData.name}`}</tspan>
+    <tspan x={rectanglePosition.x} dy="1.2em">{`ISO3: ${countryData.iso3}`}</tspan>
+    <tspan x={rectanglePosition.x} dy="1.2em">{`ISO2: ${countryData.iso2}`}</tspan>
+    <tspan x={rectanglePosition.x} dy="1.2em">{`Numeric Code: ${countryData.numeric_code}`}</tspan>
+    <tspan x={rectanglePosition.x} dy="1.2em">{`Phone Code: ${countryData.phone_code}`}</tspan>
+    <tspan x={rectanglePosition.x} dy="1.2em">{`Capital: ${countryData.capital}`}</tspan>
+    <tspan x={rectanglePosition.x} dy="1.2em">{`Currency: ${countryData.currency}`}</tspan>
+    <tspan x={rectanglePosition.x} dy="1.2em">{`Currency Name: ${countryData.currency_name}`}</tspan>
+    <tspan x={rectanglePosition.x} dy="1.2em">{`Currency Symbol: ${countryData.currency_symbol}`}</tspan>
+    <tspan x={rectanglePosition.x} dy="1.2em">{`TLD: ${countryData.tld}`}</tspan>
+    <tspan x={rectanglePosition.x} dy="1.2em">{`Native: ${countryData.native}`}</tspan>
+    <tspan x={rectanglePosition.x} dy="1.2em">{`Region: ${countryData.region}`}</tspan>
+    <tspan x={rectanglePosition.x} dy="1.2em">{`Region ID: ${countryData.region_id}`}</tspan>
+    <tspan x={rectanglePosition.x} dy="1.2em">{`Subregion: ${countryData.subregion}`}</tspan>
+    <tspan x={rectanglePosition.x} dy="1.2em">{`Subregion ID: ${countryData.subregion_id}`}</tspan>
+    <tspan x={rectanglePosition.x} dy="1.2em">{`Nationality: ${countryData.nationality}`}</tspan>
+  </text>
+)}
           <text
             x={rectanglePosition.x}
             y={rectanglePosition.y + 120}

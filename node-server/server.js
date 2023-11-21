@@ -1,5 +1,3 @@
-// server.js (Express example)
-
 const express = require('express');
 const mongoose = require('mongoose');
 const cors = require('cors');
@@ -9,29 +7,40 @@ const app = express();
 app.use(cors());
 app.use(express.json());
 
-// Connect to MongoDB (replace 'your-mongodb-connection-string' with your actual MongoDB connection string)
 mongoose.connect('mongodb://localhost:27017/Project_Countries', {
   useNewUrlParser: true,
   useUnifiedTopology: true,
 });
 
-// Define a MongoDB schema and model (assuming Mongoose is used)
 const countrySchema = new mongoose.Schema({
-  countryId: String,
-  population: Number,
+  _id: mongoose.Schema.Types.ObjectId,
+  id: Number,
+  name: String,
+  iso3: String,
+  iso2: String,
+  numeric_code: String,
+  phone_code: String,
   capital: String,
-  language: String,
+  currency: String,
+  currency_name: String,
+  currency_symbol: String,
+  tld: String,
+  native: String,
+  region: String,
+  region_id: String,
+  subregion: String,
+  subregion_id: String,
+  nationality: String,
 });
 
 const Country = mongoose.model('Country', countrySchema);
 
-// Route to get country data
-app.get('/api/countries/:countryId', async (req, res) => {
-  const { countryId } = req.params;
-  console.log(`Fetching data for countryId: ${countryId}`);
+app.get('/api/countries/:name', async (req, res) => {
+  const { name } = req.params;
+  console.log(`Fetching data for name: ${name}`);
 
   try {
-    const country = await Country.findOne({ countryId });
+    const country = await Country.findOne({ name });
     console.log('Fetched data:', country);
     res.json({ data: country ? country : null });
   } catch (error) {
@@ -40,15 +49,13 @@ app.get('/api/countries/:countryId', async (req, res) => {
   }
 });
 
-// Route to add/update country data
-app.post('/api/countries/:countryId', async (req, res) => {
-  const { countryId } = req.params;
+app.post('/api/countries/:name', async (req, res) => {
+  const { name } = req.params;
   const { population, capital, language } = req.body;
 
   try {
-    // Upsert (update or insert) the country data
     await Country.updateOne(
-      { countryId },
+      { name },
       { $set: { population, capital, language } },
       { upsert: true }
     );
