@@ -6,14 +6,34 @@ function Icon() {
   const [showRectangle, setShowRectangle] = useState(false);
   const [rectanglePosition, setRectanglePosition] = useState({ x: 0, y: 0 });
   const [svgDimensions, setSvgDimensions] = useState({ width: 1080, height: 540 });
+  const [countryData, setCountryData] = useState(null);
 
-  const fetchDataFromMongoDB = (countryId) => {
-    // Replace this with your actual MongoDB data retrieval logic
-    // For simplicity, just returning a dummy string here
-    return 'Data for ' + countryId;
+  const fetchDataFromMongoDB = async (countryId) => {
+    try {
+      const response = await fetch(`http://localhost:5000/api/countries/${countryId}`);
+      
+      if (!response.ok) {
+        console.error(`Error fetching data from server: ${response.status} - ${response.statusText}`);
+        return null;
+      }
+  
+      const data = await response.json();
+      
+      if (data.error) {
+        console.error('Error in response from server:', data.error);
+        return null;
+      }
+  
+      console.log('Fetched data:', data.data);
+  
+      return data.data;
+    } catch (error) {
+      console.error('Error during fetch:', error);
+      return null;
+    }
   };
-
-  const handleCountryClick = (countryId, event) => {
+  
+  const handleCountryClick = async (countryId, event) => {
     setSelectedCountry(countryId);
     const clickEvent = event || window.event;
 
@@ -33,13 +53,18 @@ function Icon() {
     const adjustedY = Math.min(yMax - rectHeight, Math.max(yMin, y));
 
     setRectanglePosition({ x: adjustedX, y: adjustedY });
+
+    // Fetch data and update state when the data is received
+    const data = await fetchDataFromMongoDB(countryId);
+    setCountryData(data);
+
+    // Show the rectangle after data is fetched
     setShowRectangle(true);
   };
 
-
-
   const handleCloseButtonClick = () => {
     setShowRectangle(false);
+    setCountryData(null);
   };
 
   useEffect(() => {
@@ -59,7 +84,7 @@ function Icon() {
       window.removeEventListener('resize', updateSvgDimensions);
     };
   }, []);
-
+  
   return (
     <svg
       xmlns="http://www.w3.org/2000/svg"
@@ -1912,11 +1937,24 @@ function Icon() {
             textAnchor="middle"
             dominantBaseline="middle"
           >
-            {fetchDataFromMongoDB(selectedCountry)}
+            Country ID: {selectedCountry}
           </text>
+          {countryData && (
+            <text
+              x={rectanglePosition.x}
+              y={rectanglePosition.y + 40}
+              textAnchor="middle"
+              dominantBaseline="middle"
+            >
+              Country Data:
+              <tspan x={rectanglePosition.x} dy="1.2em">{`Population: ${countryData.population}`}</tspan>
+              <tspan x={rectanglePosition.x} dy="1.2em">{`Capital: ${countryData.capital}`}</tspan>
+              <tspan x={rectanglePosition.x} dy="1.2em">{`Language: ${countryData.language}`}</tspan>
+            </text>
+          )}
           <text
             x={rectanglePosition.x}
-            y={rectanglePosition.y + 80}
+            y={rectanglePosition.y + 120}
             textAnchor="middle"
             dominantBaseline="middle"
           >
